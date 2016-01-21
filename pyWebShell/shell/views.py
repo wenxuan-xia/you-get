@@ -1,0 +1,23 @@
+from django.shortcuts import render
+
+# Create your views here.
+from django.http import HttpResponse
+import datetime
+import subprocess
+
+def current_datetime(request):
+    now = datetime.datetime.now()
+    html = "<html><body>It is now %s.</body></html>" % now
+    return HttpResponse(html)
+
+
+def myshell(request):
+    try:
+        url = request.GET['url']
+        proc = subprocess.Popen(["python3", "../you-get", "-u", "--json", url], stdout=subprocess.PIPE)
+        out, std = proc.communicate()
+        return HttpResponse(out)
+    except:
+        rst = "error"
+        return HttpResponse(rst)
+
